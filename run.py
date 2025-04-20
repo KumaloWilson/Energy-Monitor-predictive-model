@@ -13,6 +13,6 @@ if __name__ == '__main__':
         # Create database tables if they don't exist
         db.create_all()
     
-    
+    # Start the scheduler
     # Run the app
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
