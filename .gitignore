@@ -1,6 +1,7 @@
 # Environment files
 .env
 venv/
+models/
 *.env
 
 # Python cache files
