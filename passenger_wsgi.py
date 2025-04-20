@@ -2,6 +2,9 @@ import sys
 import os
 from dotenv import load_dotenv
 
+# Set OpenBLAS thread limit before any imports that might use it
+os.environ['OPENBLAS_NUM_THREADS'] = '4'  # Limit to 4 threads, adjust as needed
+
 # Load environment variables from .env file
 load_dotenv()
 
