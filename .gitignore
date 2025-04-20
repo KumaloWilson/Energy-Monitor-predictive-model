@@ -1,0 +1,18 @@
+# Environment files
+.env
+venv/
+*.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database files
+instance/
+*.db
+*.sqlite3
+
+# IDE files
+.vscode/
+.idea/
