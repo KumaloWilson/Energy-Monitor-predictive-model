@@ -25,6 +25,8 @@ def create_app(config_name='default'):
     from app.views.api import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
+    # Add index route
+    @app.route('/')
     def index():
         return render_template('index.html')
     
