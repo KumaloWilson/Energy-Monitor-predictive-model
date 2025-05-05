@@ -1,12 +1,1486 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Energy Management Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Monitor API Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #dbeafe;
+            --text-color: #1f2937;
+            --light-gray: #f3f4f6;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 25px 0 10px;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--light-gray);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .endpoint {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .method {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            color: white;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .get {
+            background-color: #22c55e;
+        }
+        
+        .post {
+            background-color: #3b82f6;
+        }
+        
+        .put {
+            background-color: #f59e0b;
+        }
+        
+        .delete {
+            background-color: #ef4444;
+        }
+        
+        .path {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        
+        .params {
+            margin-top: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: var(--light-gray);
+        }
+        
+        .tab {
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+        
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        
+        .tab button.active {
+            background-color: white;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .tabcontent {
+            display: none;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .tabcontent.active {
+            display: block;
+        }
+        
+        .nav {
+            position: sticky;
+            top: 20px;
+            float: right;
+            width: 250px;
+            margin-left: 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        .nav h4 {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav ul {
+            list-style-type: none;
+        }
+        
+        .nav ul li {
+            margin-bottom: 5px;
+        }
+        
+        .nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .content {
+            margin-right: 270px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav {
+                float: none;
+                width: 100%;
+                margin-left: 0;
+                margin-bottom: 20px;
+            }
+            
+            .content {
+                margin-right: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Energy Management System API</h1>
-    <p>Use the API endpoints at <code>/api</code> to interact with devices, consumption, and predictions.</p>
+    <header>
+        <h1>Energy Monitor API Documentation</h1>
+        <p>This documentation provides details on all available API endpoints for the Energy Monitor application.</p>
+    </header>
+    
+    <div class="nav">
+        <h4>API Endpoints</h4>
+        <ul>
+            <li><a href="#devices">Devices</a></li>
+            <li><a href="#consumption">Consumption</a></li>
+            <li><a href="#predictions">Predictions</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+        </ul>
+    </div>
+    
+    <div class="content">
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>The Energy Monitor API provides endpoints for managing devices, tracking energy consumption, and generating predictions for future energy usage and peak demand.</p>
+            <p>All API endpoints are prefixed with <code>/api</code>.</p>
+            <p>The API returns JSON responses and accepts JSON requests.</p>
+        </section>
+        
+        <section id="devices">
+            <h2>Devices</h2>
+            <p>Endpoints for managing energy-consuming devices.</p>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/devices</span>
+                </div>
+                <p>Get a list of all registered devices.</p>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'devices-get-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'devices-get-curl')">Curl</button>
+                </div>
+                
+                <div id="devices-get-response" class="tabcontent active">
+                    <pre><code>[
+    {
+        "id": 1,
+        "Device": "Television",
+        "MeterNumber": "8781211",
+        "Rated_Power": "100 W",
+        "Relay_Status": "ON",
+        "DateAdded": "2025-04-30T21:50:53.929339Z"
+    },
+    {
+        "id": 2,
+        "Device": "Refridgerator",
+        "MeterNumber": "8781212",
+        "Rated_Power": "200 W",
+        "Relay_Status": "ON",
+        "DateAdded": "2025-04-30T21:51:08.681369Z"
+    }
+]</code></pre>
+                </div>
+                
+                <div id="devices-get-curl" class="tabcontent">
+                    <pre><code>curl -X GET http://localhost:5000/api/devices</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/devices/{device_id}</span>
+                </div>
+                <p>Get details of a specific device by ID.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device to retrieve</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'device-get-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-get-curl')">Curl</button>
+                </div>
+                
+                <div id="device-get-response" class="tabcontent active">
+                    <pre><code>{
+    "id": 1,
+    "Device": "Television",
+    "MeterNumber": "8781211",
+    "Rated_Power": "100 W",
+    "Relay_Status": "ON",
+    "DateAdded": "2025-04-30T21:50:53.929339Z"
+}</code></pre>
+                </div>
+                
+                <div id="device-get-curl" class="tabcontent">
+                    <pre><code>curl -X GET http://localhost:5000/api/devices/1</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/devices</span>
+                </div>
+                <p>Create a new device.</p>
+                
+                <div class="params">
+                    <h4>Request Body</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>Name of the device</td>
+                        </tr>
+                        <tr>
+                            <td>meter_number</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Meter number of the device</td>
+                        </tr>
+                        <tr>
+                            <td>rated_power</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>Rated power of the device (e.g., "100 W")</td>
+                        </tr>
+                        <tr>
+                            <td>relay_status</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Status of the relay ("ON" or "OFF")</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'device-post-request')">Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-post-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-post-curl')">Curl</button>
+                </div>
+                
+                <div id="device-post-request" class="tabcontent active">
+                    <pre><code>{
+    "name": "Air Conditioner",
+    "meter_number": "8781213",
+    "rated_power": "1500 W",
+    "relay_status": "OFF"
+}</code></pre>
+                </div>
+                
+                <div id="device-post-response" class="tabcontent">
+                    <pre><code>{
+    "id": 3,
+    "Device": "Air Conditioner",
+    "MeterNumber": "8781213",
+    "Rated_Power": "1500 W",
+    "Relay_Status": "OFF",
+    "DateAdded": "2025-05-05T11:31:40.123456Z"
+}</code></pre>
+                </div>
+                
+                <div id="device-post-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"name": "Air Conditioner", "meter_number": "8781213", "rated_power": "1500 W", "relay_status": "OFF"}' http://localhost:5000/api/devices</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <span class="path">/api/devices/{device_id}</span>
+                </div>
+                <p>Update an existing device.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device to update</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Request Body</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Name of the device</td>
+                        </tr>
+                        <tr>
+                            <td>meter_number</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Meter number of the device</td>
+                        </tr>
+                        <tr>
+                            <td>rated_power</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Rated power of the device (e.g., "100 W")</td>
+                        </tr>
+                        <tr>
+                            <td>relay_status</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Status of the relay ("ON" or "OFF")</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'device-put-request')">Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-put-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-put-curl')">Curl</button>
+                </div>
+                
+                <div id="device-put-request" class="tabcontent active">
+                    <pre><code>{
+    "name": "LED Television",
+    "relay_status": "OFF"
+}</code></pre>
+                </div>
+                
+                <div id="device-put-response" class="tabcontent">
+                    <pre><code>{
+    "id": 1,
+    "Device": "LED Television",
+    "MeterNumber": "8781211",
+    "Rated_Power": "100 W",
+    "Relay_Status": "OFF",
+    "DateAdded": "2025-04-30T21:50:53.929339Z"
+}</code></pre>
+                </div>
+                
+                <div id="device-put-curl" class="tabcontent">
+                    <pre><code>curl -X PUT -H "Content-Type: application/json" -d '{"name": "LED Television", "relay_status": "OFF"}' http://localhost:5000/api/devices/1</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="path">/api/devices/{device_id}</span>
+                </div>
+                <p>Delete a device.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device to delete</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'device-delete-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-delete-curl')">Curl</button>
+                </div>
+                
+                <div id="device-delete-response" class="tabcontent active">
+                    <pre><code>{
+    "message": "Device deleted successfully"
+}</code></pre>
+                </div>
+                
+                <div id="device-delete-curl" class="tabcontent">
+                    <pre><code>curl -X DELETE http://localhost:5000/api/devices/3</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/devices/sync</span>
+                </div>
+                <p>Sync devices from the external API.</p>
+                
+                <div class="params">
+                    <h4>Request Body (Optional)</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>api_url</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Custom API URL to fetch devices from</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'device-sync-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'device-sync-curl')">Curl</button>
+                </div>
+                
+                <div id="device-sync-response" class="tabcontent active">
+                    <pre><code>{
+    "message": "Devices synced successfully"
+}</code></pre>
+                </div>
+                
+                <div id="device-sync-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" http://localhost:5000/api/devices/sync</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="consumption">
+            <h2>Consumption</h2>
+            <p>Endpoints for managing energy consumption data.</p>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/consumption/{device_id}</span>
+                </div>
+                <p>Get consumption records for a specific device.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>start_date</td>
+                            <td>String (ISO format)</td>
+                            <td>No</td>
+                            <td>Start date for filtering records</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>String (ISO format)</td>
+                            <td>No</td>
+                            <td>End date for filtering records</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'consumption-get-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'consumption-get-curl')">Curl</button>
+                </div>
+                
+                <div id="consumption-get-response" class="tabcontent active">
+                    <pre><code>[
+    {
+        "id": 1,
+        "Appliance_Info": 1,
+        "Voltage": "220.0",
+        "Current": "0.15",
+        "TimeOn": "175.63",
+        "ActiveEnergy": "0.0985",
+        "Reading_Time_Stamp": "2025-03-24T22:00:00Z"
+    },
+    {
+        "id": 2,
+        "Appliance_Info": 1,
+        "Voltage": "220.0",
+        "Current": "0.29",
+        "TimeOn": "35.96",
+        "ActiveEnergy": "0.0384",
+        "Reading_Time_Stamp": "2025-03-24T22:06:00Z"
+    }
+]</code></pre>
+                </div>
+                
+                <div id="consumption-get-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/consumption/1?start_date=2025-03-24T00:00:00Z&end_date=2025-03-25T00:00:00Z"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/consumption/total</span>
+                </div>
+                <p>Get total consumption for specified devices within a date range.</p>
+                
+                <div class="params">
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_ids</td>
+                            <td>String (comma-separated integers)</td>
+                            <td>No</td>
+                            <td>IDs of devices to include</td>
+                        </tr>
+                        <tr>
+                            <td>start_date</td>
+                            <td>String (ISO format)</td>
+                            <td>No</td>
+                            <td>Start date for filtering records</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>String (ISO format)</td>
+                            <td>No</td>
+                            <td>End date for filtering records</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'consumption-total-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'consumption-total-curl')">Curl</button>
+                </div>
+                
+                <div id="consumption-total-response" class="tabcontent active">
+                    <pre><code>[
+    {
+        "Appliance_Info_id": 1,
+        "total_energy": 819.7125
+    },
+    {
+        "Appliance_Info_id": 2,
+        "total_energy": 12698.1467
+    }
+]</code></pre>
+                </div>
+                
+                <div id="consumption-total-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/consumption/total?device_ids=1,2&start_date=2025-03-25T00:00:00Z&end_date=2025-04-01T23:59:59Z"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/consumption</span>
+                </div>
+                <p>Add a new consumption record.</p>
+                
+                <div class="params">
+                    <h4>Request Body</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>Yes</td>
+                            <td>ID of the device</td>
+                        </tr>
+                        <tr>
+                            <td>voltage</td>
+                            <td>Number</td>
+                            <td>Yes</td>
+                            <td>Voltage reading</td>
+                        </tr>
+                        <tr>
+                            <td>current</td>
+                            <td>Number</td>
+                            <td>Yes</td>
+                            <td>Current reading</td>
+                        </tr>
+                        <tr>
+                            <td>time_on</td>
+                            <td>Number</td>
+                            <td>Yes</td>
+                            <td>Time on in minutes</td>
+                        </tr>
+                        <tr>
+                            <td>active_energy</td>
+                            <td>Number</td>
+                            <td>Yes</td>
+                            <td>Active energy in kWh</td>
+                        </tr>
+                        <tr>
+                            <td>reading_timestamp</td>
+                            <td>String (ISO format)</td>
+                            <td>Yes</td>
+                            <td>Timestamp of the reading</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'consumption-post-request')">Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'consumption-post-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'consumption-post-curl')">Curl</button>
+                </div>
+                
+                <div id="consumption-post-request" class="tabcontent active">
+                    <pre><code>{
+    "device_id": 1,
+    "voltage": 220.0,
+    "current": 0.5,
+    "time_on": 60.0,
+    "active_energy": 0.1833,
+    "reading_timestamp": "2025-05-05T11:00:00Z"
+}</code></pre>
+                </div>
+                
+                <div id="consumption-post-response" class="tabcontent">
+                    <pre><code>{
+    "id": 9,
+    "Appliance_Info": 1,
+    "Voltage": "220.0",
+    "Current": "0.50",
+    "TimeOn": "60.00",
+    "ActiveEnergy": "0.1833",
+    "Reading_Time_Stamp": "2025-05-05T11:00:00Z"
+}</code></pre>
+                </div>
+                
+                <div id="consumption-post-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"device_id": 1, "voltage": 220.0, "current": 0.5, "time_on": 60.0, "active_energy": 0.1833, "reading_timestamp": "2025-05-05T11:00:00Z"}' http://localhost:5000/api/consumption</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/consumption/sync/{device_id}</span>
+                </div>
+                <p>Sync consumption data for a specific device from the external API.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Request Body (Optional)</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>api_url</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Custom API URL to fetch consumption data from</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'consumption-sync-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'consumption-sync-curl')">Curl</button>
+                </div>
+                
+                <div id="consumption-sync-response" class="tabcontent active">
+                    <pre><code>{
+    "message": "Consumption data synced successfully"
+}</code></pre>
+                </div>
+                
+                <div id="consumption-sync-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" http://localhost:5000/api/consumption/sync/1</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="predictions">
+            <h2>Predictions</h2>
+            <p>Endpoints for energy usage predictions and peak demand forecasting.</p>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/predictions/energy</span>
+                </div>
+                <p>Get energy predictions with optional filtering.</p>
+                
+                <div class="params">
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>No</td>
+                            <td>ID of the device to filter predictions</td>
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>Date to filter predictions</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-energy-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-energy-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-energy-response" class="tabcontent active">
+                    <pre><code>[
+    {
+        "id": 1,
+        "device_id": 1,
+        "device_name": "Television",
+        "predicted_energy": 0.0985,
+        "prediction_date": "2025-05-05",
+        "prediction_hour": 0,
+        "created_at": "2025-05-05T00:00:00Z"
+    },
+    {
+        "id": 2,
+        "device_id": 1,
+        "device_name": "Television",
+        "predicted_energy": 0.0754,
+        "prediction_date": "2025-05-05",
+        "prediction_hour": 1,
+        "created_at": "2025-05-05T00:00:00Z"
+    }
+]</code></pre>
+                </div>
+                
+                <div id="predictions-energy-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/predictions/energy?device_id=1&date=2025-05-05"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/predictions/peak</span>
+                </div>
+                <p>Get peak demand predictions with optional date filtering.</p>
+                
+                <div class="params">
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>Date to filter predictions</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-peak-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-peak-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-peak-response" class="tabcontent active">
+                    <pre><code>[
+    {
+        "id": 1,
+        "predicted_peak_demand": 1.25,
+        "prediction_date": "2025-05-05",
+        "prediction_hour": 19,
+        "created_at": "2025-05-05T00:00:00Z"
+    },
+    {
+        "id": 2,
+        "predicted_peak_demand": 0.95,
+        "prediction_date": "2025-05-05",
+        "prediction_hour": 20,
+        "created_at": "2025-05-05T00:00:00Z"
+    }
+]</code></pre>
+                </div>
+                
+                <div id="predictions-peak-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/predictions/peak?date=2025-05-05"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/predictions/train</span>
+                </div>
+                <p>Train prediction models.</p>
+                
+                <div class="params">
+                    <h4>Request Body (Optional)</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>No</td>
+                            <td>ID of the device to train model for. If not provided, trains peak demand model.</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-train-request')">Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-train-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-train-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-train-request" class="tabcontent active">
+                    <pre><code>{
+    "device_id": 1
+}</code></pre>
+                </div>
+                
+                <div id="predictions-train-response" class="tabcontent">
+                    <pre><code>{
+    "message": "Energy prediction model for device 1 trained successfully"
+}</code></pre>
+                </div>
+                
+                <div id="predictions-train-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"device_id": 1}' http://localhost:5000/api/predictions/train</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/predictions/generate</span>
+                </div>
+                <p>Generate predictions for the next few days.</p>
+                
+                <div class="params">
+                    <h4>Request Body (Optional)</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>days_ahead</td>
+                            <td>Integer</td>
+                            <td>No</td>
+                            <td>Number of days to generate predictions for (default: 1)</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-generate-request')">Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-generate-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-generate-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-generate-request" class="tabcontent active">
+                    <pre><code>{
+    "days_ahead": 3
+}</code></pre>
+                </div>
+                
+                <div id="predictions-generate-response" class="tabcontent">
+                    <pre><code>{
+    "message": "Predictions generated for the next 3 days"
+}</code></pre>
+                </div>
+                
+                <div id="predictions-generate-curl" class="tabcontent">
+                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"days_ahead": 3}' http://localhost:5000/api/predictions/generate</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/predictions/all</span>
+                </div>
+                <p>Get all predictions (energy and peak demand) for a date range and devices.</p>
+                
+                <div class="params">
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>start_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>Start date for predictions (default: today)</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>End date for predictions (default: start_date + 7 days)</td>
+                        </tr>
+                        <tr>
+                            <td>device_ids</td>
+                            <td>String (comma-separated integers)</td>
+                            <td>No</td>
+                            <td>IDs of devices to include</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-all-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-all-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-all-response" class="tabcontent active">
+                    <pre><code>{
+    "start_date": "2025-05-05",
+    "end_date": "2025-05-12",
+    "devices": {
+        "1": {
+            "id": 1,
+            "Device": "Television",
+            "MeterNumber": "8781211",
+            "Rated_Power": "100 W",
+            "Relay_Status": "ON",
+            "DateAdded": "2025-04-30T21:50:53.929339Z"
+        },
+        "2": {
+            "id": 2,
+            "Device": "Refridgerator",
+            "MeterNumber": "8781212",
+            "Rated_Power": "200 W",
+            "Relay_Status": "ON",
+            "DateAdded": "2025-04-30T21:51:08.681369Z"
+        }
+    },
+    "energy_predictions": {
+        "2025-05-05": {
+            "1": {
+                "0": {
+                    "predicted_energy": 0.0985,
+                    "created_at": "2025-05-05T00:00:00Z"
+                },
+                "1": {
+                    "predicted_energy": 0.0754,
+                    "created_at": "2025-05-05T00:00:00Z"
+                }
+            },
+            "2": {
+                "0": {
+                    "predicted_energy": 0.1523,
+                    "created_at": "2025-05-05T00:00:00Z"
+                },
+                "1": {
+                    "predicted_energy": 0.1498,
+                    "created_at": "2025-05-05T00:00:00Z"
+                }
+            }
+        }
+    },
+    "peak_demand_predictions": {
+        "2025-05-05": {
+            "19": {
+                "predicted_peak_demand": 1.25,
+                "created_at": "2025-05-05T00:00:00Z"
+            },
+            "20": {
+                "predicted_peak_demand": 0.95,
+                "created_at": "2025-05-05T00:00:00Z"
+            }
+        }
+    },
+    "daily_summaries": {
+        "2025-05-05": {
+            "total_energy": {
+                "1": 2.3568,
+                "2": 3.6542
+            },
+            "peak_demand": 1.25,
+            "peak_hour": 19
+        }
+    }
+}</code></pre>
+                </div>
+                
+                <div id="predictions-all-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/predictions/all?start_date=2025-05-05&end_date=2025-05-12&device_ids=1,2"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/predictions/device/{device_id}/summary</span>
+                </div>
+                <p>Get a summary of predictions for a specific device.</p>
+                
+                <div class="params">
+                    <h4>Path Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>device_id</td>
+                            <td>Integer</td>
+                            <td>ID of the device</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>start_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>Start date for predictions (default: today)</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>End date for predictions (default: start_date + 7 days)</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-device-summary-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-device-summary-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-device-summary-response" class="tabcontent active">
+                    <pre><code>{
+    "device": {
+        "id": 1,
+        "Device": "Television",
+        "MeterNumber": "8781211",
+        "Rated_Power": "100 W",
+        "Relay_Status": "ON",
+        "DateAdded": "2025-04-30T21:50:53.929339Z"
+    },
+    "start_date": "2025-05-05",
+    "end_date": "2025-05-12",
+    "daily_predictions": {
+        "2025-05-05": {
+            "total": 2.3568,
+            "hourly": {
+                "0": 0.0985,
+                "1": 0.0754,
+                "2": 0.0623,
+                "3": 0.0512
+            }
+        },
+        "2025-05-06": {
+            "total": 2.4123,
+            "hourly": {
+                "0": 0.1012,
+                "1": 0.0798,
+                "2": 0.0645,
+                "3": 0.0534
+            }
+        }
+    },
+    "hourly_patterns": {
+        "0": 0.0998,
+        "1": 0.0776,
+        "2": 0.0634,
+        "3": 0.0523
+    },
+    "total_predicted_energy": 16.7891
+}</code></pre>
+                </div>
+                
+                <div id="predictions-device-summary-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/predictions/device/1/summary?start_date=2025-05-05&end_date=2025-05-12"</code></pre>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/predictions/peak/summary</span>
+                </div>
+                <p>Get a summary of peak demand predictions.</p>
+                
+                <div class="params">
+                    <h4>Query Parameters</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>start_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>Start date for predictions (default: today)</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>String (YYYY-MM-DD)</td>
+                            <td>No</td>
+                            <td>End date for predictions (default: start_date + 7 days)</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'predictions-peak-summary-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'predictions-peak-summary-curl')">Curl</button>
+                </div>
+                
+                <div id="predictions-peak-summary-response" class="tabcontent active">
+                    <pre><code>{
+    "start_date": "2025-05-05",
+    "end_date": "2025-05-12",
+    "daily_peaks": {
+        "2025-05-05": {
+            "peak_demand": 1.25,
+            "peak_hour": 19,
+            "hourly": {
+                "0": 0.25,
+                "1": 0.18,
+                "2": 0.15,
+                "19": 1.25,
+                "20": 0.95
+            }
+        },
+        "2025-05-06": {
+            "peak_demand": 1.32,
+            "peak_hour": 19,
+            "hourly": {
+                "0": 0.28,
+                "1": 0.19,
+                "2": 0.16,
+                "19": 1.32,
+                "20": 1.05
+            }
+        }
+    },
+    "hourly_patterns": {
+        "0": 0.265,
+        "1": 0.185,
+        "2": 0.155,
+        "19": 1.285,
+        "20": 1.0
+    },
+    "overall_peak": {
+        "demand": 1.32,
+        "date": "2025-05-06",
+        "hour": 19
+    }
+}</code></pre>
+                </div>
+                
+                <div id="predictions-peak-summary-curl" class="tabcontent">
+                    <pre><code>curl -X GET "http://localhost:5000/api/predictions/peak/summary?start_date=2025-05-05&end_date=2025-05-12"</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <p>Endpoints for dashboard data and overview.</p>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/dashboard/overview</span>
+                </div>
+                <p>Get an overview of energy consumption and predictions for the dashboard.</p>
+                
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'dashboard-overview-response')">Response</button>
+                    <button class="tablinks" onclick="openTab(event, 'dashboard-overview-curl')">Curl</button>
+                </div>
+                
+                <div id="dashboard-overview-response" class="tabcontent active">
+                    <pre><code>{
+    "date": "2025-05-05",
+    "devices_count": 2,
+    "today_predicted_energy": 6.011,
+    "tomorrow_predicted_energy": 6.325,
+    "energy_change_percentage": 5.22,
+    "peak_demand": 1.25,
+    "peak_hour": 19,
+    "devices": [
+        {
+            "id": 1,
+            "Device": "Television",
+            "MeterNumber": "8781211",
+            "Rated_Power": "100 W",
+            "Relay_Status": "ON",
+            "DateAdded": "2025-04-30T21:50:53.929339Z"
+        },
+        {
+            "id": 2,
+            "Device": "Refridgerator",
+            "MeterNumber": "8781212",
+            "Rated_Power": "200 W",
+            "Relay_Status": "ON",
+            "DateAdded": "2025-04-30T21:51:08.681369Z"
+        }
+    ],
+    "hourly_predictions": {
+        "0": {
+            "1": 0.0985,
+            "2": 0.1523
+        },
+        "1": {
+            "1": 0.0754,
+            "2": 0.1498
+        },
+        "2": {
+            "1": 0.0623,
+            "2": 0.1475
+        }
+    }
+}</code></pre>
+                </div>
+                
+                <div id="dashboard-overview-curl" class="tabcontent">
+                    <pre><code>curl -X GET http://localhost:5000/api/dashboard/overview</code></pre>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </body>
 </html>

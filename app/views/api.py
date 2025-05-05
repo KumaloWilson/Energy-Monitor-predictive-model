@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from app.controllers.device_controller import DeviceController
 from app.controllers.consumption_controller import ConsumptionController
 from app.controllers.prediction_controller import PredictionController
@@ -6,6 +6,11 @@ from datetime import datetime, timedelta
 from app.utils.data_collector import DataCollector
 
 api_bp = Blueprint('api', __name__)
+
+# Root endpoint for API documentation
+@api_bp.route('/', methods=['GET'])
+def api_docs():
+    return render_template('index.html')
 
 # Device endpoints
 @api_bp.route('/devices', methods=['GET'])
