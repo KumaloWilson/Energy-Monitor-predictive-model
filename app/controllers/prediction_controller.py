@@ -1,7 +1,7 @@
 from app.models.prediction import EnergyPrediction, PeakDemandPrediction
 from app.models.consumption import ConsumptionRecord
 from app.models.device import Device
-from app.services.data_collector import DataCollector
+from app.utils.data_collector import DataCollector
 from app import db
 from datetime import datetime, timedelta
 import pandas as pd
@@ -398,7 +398,7 @@ class PredictionController:
             'start_date': start_date.isoformat(),
             'end_date': end_date.isoformat(),
             'daily_predictions': {},
-            'hourly_patterns': {hour: 0 for hour in range(24)},
+            'hourly_patterns': {str(hour): 0 for hour in range(24)},
             'total_predicted_energy': 0
         }
         
@@ -411,9 +411,9 @@ class PredictionController:
                     'hourly': {}
                 }
                 
-            result['daily_predictions'][date_str]['hourly'][pred.prediction_hour] = pred.predicted_energy
+            result['daily_predictions'][date_str]['hourly'][str(pred.prediction_hour)] = pred.predicted_energy
             result['daily_predictions'][date_str]['total'] += pred.predicted_energy
-            result['hourly_patterns'][pred.prediction_hour] += pred.predicted_energy
+            result['hourly_patterns'][str(pred.prediction_hour)] += pred.predicted_energy
             result['total_predicted_energy'] += pred.predicted_energy
         
         # Calculate average hourly patterns
@@ -445,7 +445,7 @@ class PredictionController:
             'start_date': start_date.isoformat(),
             'end_date': end_date.isoformat(),
             'daily_peaks': {},
-            'hourly_patterns': {hour: 0 for hour in range(24)},
+            'hourly_patterns': {str(hour): 0 for hour in range(24)},
             'overall_peak': {
                 'demand': 0,
                 'date': None,
@@ -463,8 +463,8 @@ class PredictionController:
                     'hourly': {}
                 }
                 
-            result['daily_peaks'][date_str]['hourly'][pred.prediction_hour] = pred.predicted_peak_demand
-            result['hourly_patterns'][pred.prediction_hour] += pred.predicted_peak_demand
+            result['daily_peaks'][date_str]['hourly'][str(pred.prediction_hour)] = pred.predicted_peak_demand
+            result['hourly_patterns'][str(pred.prediction_hour)] += pred.predicted_peak_demand
             
             # Update daily peak
             if pred.predicted_peak_demand > result['daily_peaks'][date_str]['peak_demand']:

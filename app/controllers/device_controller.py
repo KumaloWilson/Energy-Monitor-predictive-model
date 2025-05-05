@@ -23,11 +23,13 @@ class DeviceController:
         return None
     
     @staticmethod
-    def create_device(name, rated_power):
+    def create_device(name, meter_number, rated_power, relay_status="OFF"):
         """Create a new device"""
         device = Device(
             name=name,
+            meter_number=meter_number,
             rated_power=rated_power,
+            relay_status=relay_status,
             date_added=datetime.utcnow()
         )
         db.session.add(device)
@@ -35,7 +37,7 @@ class DeviceController:
         return device.to_dict()
     
     @staticmethod
-    def update_device(device_id, name=None, rated_power=None):
+    def update_device(device_id, name=None, meter_number=None, rated_power=None, relay_status=None):
         """Update a device"""
         device = Device.query.get(device_id)
         if not device:
@@ -43,8 +45,12 @@ class DeviceController:
         
         if name:
             device.name = name
+        if meter_number:
+            device.meter_number = meter_number
         if rated_power:
             device.rated_power = rated_power
+        if relay_status:
+            device.relay_status = relay_status
         
         db.session.commit()
         return device.to_dict()
@@ -75,7 +81,9 @@ class DeviceController:
                 if existing_device:
                     # Update existing device
                     existing_device.name = device_data.get('Device')
+                    existing_device.meter_number = device_data.get('MeterNumber')
                     existing_device.rated_power = device_data.get('Rated_Power')
+                    existing_device.relay_status = device_data.get('Relay_Status')
                     # Parse date if needed
                     if 'DateAdded' in device_data:
                         existing_device.date_added = datetime.fromisoformat(device_data.get('DateAdded').replace('Z', '+00:00'))
@@ -84,7 +92,9 @@ class DeviceController:
                     new_device = Device(
                         id=device_data.get('id'),
                         name=device_data.get('Device'),
-                        rated_power=device_data.get('Rated_Power')
+                        meter_number=device_data.get('MeterNumber'),
+                        rated_power=device_data.get('Rated_Power'),
+                        relay_status=device_data.get('Relay_Status')
                     )
                     # Parse date if needed
                     if 'DateAdded' in device_data:

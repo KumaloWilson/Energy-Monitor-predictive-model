@@ -26,7 +26,15 @@ def create_device():
     if not data or 'name' not in data or 'rated_power' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
     
-    device = DeviceController.create_device(data['name'], data['rated_power'])
+    meter_number = data.get('meter_number', '')
+    relay_status = data.get('relay_status', 'OFF')
+    
+    device = DeviceController.create_device(
+        data['name'], 
+        meter_number, 
+        data['rated_power'], 
+        relay_status
+    )
     return jsonify(device), 201
 
 @api_bp.route('/devices/<int:device_id>', methods=['PUT'])
@@ -38,7 +46,9 @@ def update_device(device_id):
     device = DeviceController.update_device(
         device_id, 
         name=data.get('name'), 
-        rated_power=data.get('rated_power')
+        meter_number=data.get('meter_number'),
+        rated_power=data.get('rated_power'),
+        relay_status=data.get('relay_status')
     )
     
     if device:

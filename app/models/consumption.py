@@ -4,7 +4,7 @@ from datetime import datetime
 class ConsumptionRecord(db.Model):
     __tablename__ = 'consumption_records'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'), nullable=False)
     voltage = db.Column(db.Float, nullable=False)
     current = db.Column(db.Float, nullable=False)
@@ -18,7 +18,7 @@ class ConsumptionRecord(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'Appliance_Info': self.device.to_dict() if self.device else None,
+            'Appliance_Info': self.device_id,
             'Voltage': f"{self.voltage:.1f}",
             'Current': f"{self.current:.2f}",
             'TimeOn': f"{self.time_on:.2f}",

@@ -4,6 +4,9 @@ from app import db
 from datetime import datetime, timedelta
 import requests
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ConsumptionController:
     @staticmethod
@@ -63,29 +66,46 @@ class ConsumptionController:
     def sync_consumption_from_api(api_url, device_id):
         """Sync consumption records for a device from external API"""
         try:
+            logger.info(f"Fetching consumption data from {api_url}")
             response = requests.get(api_url)
             response.raise_for_status()
             records_data = response.json()
             
+            # Check if device exists
+            device = Device.query.get(device_id)
+            if not device:
+                logger.error(f"Device with ID {device_id} not found")
+                return False
+            
+            count = 0
             for record_data in records_data:
+                # Generate a unique ID based on device_id and timestamp
+                timestamp = datetime.fromisoformat(record_data.get('Reading_Time_Stamp').replace('Z', '+00:00'))
+                timestamp_str = timestamp.strftime('%Y%m%d%H%M%S')
+                record_id = int(f"{device_id}{timestamp_str}")
+                
                 # Check if record already exists
-                existing_record = ConsumptionRecord.query.get(record_data.get('id'))
+                existing_record = ConsumptionRecord.query.filter_by(
+                    device_id=device_id,
+                    reading_timestamp=timestamp
+                ).first()
                 
                 if not existing_record:
                     # Create new record
                     new_record = ConsumptionRecord(
-                        id=record_data.get('id'),
                         device_id=device_id,
                         voltage=float(record_data.get('Voltage')),
                         current=float(record_data.get('Current')),
                         time_on=float(record_data.get('TimeOn')),
                         active_energy=float(record_data.get('ActiveEnergy')),
-                        reading_timestamp=datetime.fromisoformat(record_data.get('Reading_Time_Stamp').replace('Z', '+00:00'))
+                        reading_timestamp=timestamp
                     )
                     db.session.add(new_record)
+                    count += 1
             
             db.session.commit()
+            logger.info(f"Successfully synced {count} new consumption records for device {device_id}")
             return True
         except Exception as e:
-            print(f"Error syncing consumption data: {str(e)}")
+            logger.error(f"Error syncing consumption data: {str(e)}")
             return False
