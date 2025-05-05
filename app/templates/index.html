@@ -258,6 +258,7 @@
             <p>The Energy Monitor API provides endpoints for managing devices, tracking energy consumption, and generating predictions for future energy usage and peak demand.</p>
             <p>All API endpoints are prefixed with <code>/api</code>.</p>
             <p>The API returns JSON responses and accepts JSON requests.</p>
+            <p><strong>Important:</strong> Devices and consumption data can only be added through syncing with the external API. Direct creation endpoints are disabled.</p>
         </section>
         
         <section id="devices">
@@ -351,72 +352,16 @@
                     <span class="method post">POST</span>
                     <span class="path">/api/devices</span>
                 </div>
-                <p>Create a new device.</p>
-                
-                <div class="params">
-                    <h4>Request Body</h4>
-                    <table>
-                        <tr>
-                            <th>Parameter</th>
-                            <th>Type</th>
-                            <th>Required</th>
-                            <th>Description</th>
-                        </tr>
-                        <tr>
-                            <td>name</td>
-                            <td>String</td>
-                            <td>Yes</td>
-                            <td>Name of the device</td>
-                        </tr>
-                        <tr>
-                            <td>meter_number</td>
-                            <td>String</td>
-                            <td>No</td>
-                            <td>Meter number of the device</td>
-                        </tr>
-                        <tr>
-                            <td>rated_power</td>
-                            <td>String</td>
-                            <td>Yes</td>
-                            <td>Rated power of the device (e.g., "100 W")</td>
-                        </tr>
-                        <tr>
-                            <td>relay_status</td>
-                            <td>String</td>
-                            <td>No</td>
-                            <td>Status of the relay ("ON" or "OFF")</td>
-                        </tr>
-                    </table>
-                </div>
+                <p><strong>DISABLED:</strong> Devices can only be added through syncing with the external API. Use <code>/api/devices/sync</code> instead.</p>
                 
                 <div class="tab">
-                    <button class="tablinks active" onclick="openTab(event, 'device-post-request')">Request</button>
-                    <button class="tablinks" onclick="openTab(event, 'device-post-response')">Response</button>
-                    <button class="tablinks" onclick="openTab(event, 'device-post-curl')">Curl</button>
+                    <button class="tablinks active" onclick="openTab(event, 'device-post-response')">Response</button>
                 </div>
                 
-                <div id="device-post-request" class="tabcontent active">
+                <div id="device-post-response" class="tabcontent active">
                     <pre><code>{
-    "name": "Air Conditioner",
-    "meter_number": "8781213",
-    "rated_power": "1500 W",
-    "relay_status": "OFF"
+    "error": "Devices can only be added through syncing with the external API. Use /api/devices/sync instead."
 }</code></pre>
-                </div>
-                
-                <div id="device-post-response" class="tabcontent">
-                    <pre><code>{
-    "id": 3,
-    "Device": "Air Conditioner",
-    "MeterNumber": "8781213",
-    "Rated_Power": "1500 W",
-    "Relay_Status": "OFF",
-    "DateAdded": "2025-05-05T11:31:40.123456Z"
-}</code></pre>
-                </div>
-                
-                <div id="device-post-curl" class="tabcontent">
-                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"name": "Air Conditioner", "meter_number": "8781213", "rated_power": "1500 W", "relay_status": "OFF"}' http://localhost:5000/api/devices</code></pre>
                 </div>
             </div>
             
@@ -734,87 +679,16 @@
                     <span class="method post">POST</span>
                     <span class="path">/api/consumption</span>
                 </div>
-                <p>Add a new consumption record.</p>
-                
-                <div class="params">
-                    <h4>Request Body</h4>
-                    <table>
-                        <tr>
-                            <th>Parameter</th>
-                            <th>Type</th>
-                            <th>Required</th>
-                            <th>Description</th>
-                        </tr>
-                        <tr>
-                            <td>device_id</td>
-                            <td>Integer</td>
-                            <td>Yes</td>
-                            <td>ID of the device</td>
-                        </tr>
-                        <tr>
-                            <td>voltage</td>
-                            <td>Number</td>
-                            <td>Yes</td>
-                            <td>Voltage reading</td>
-                        </tr>
-                        <tr>
-                            <td>current</td>
-                            <td>Number</td>
-                            <td>Yes</td>
-                            <td>Current reading</td>
-                        </tr>
-                        <tr>
-                            <td>time_on</td>
-                            <td>Number</td>
-                            <td>Yes</td>
-                            <td>Time on in minutes</td>
-                        </tr>
-                        <tr>
-                            <td>active_energy</td>
-                            <td>Number</td>
-                            <td>Yes</td>
-                            <td>Active energy in kWh</td>
-                        </tr>
-                        <tr>
-                            <td>reading_timestamp</td>
-                            <td>String (ISO format)</td>
-                            <td>Yes</td>
-                            <td>Timestamp of the reading</td>
-                        </tr>
-                    </table>
-                </div>
+                <p><strong>DISABLED:</strong> Consumption records can only be added through syncing with the external API. Use <code>/api/consumption/sync/{device_id}</code> instead.</p>
                 
                 <div class="tab">
-                    <button class="tablinks active" onclick="openTab(event, 'consumption-post-request')">Request</button>
-                    <button class="tablinks" onclick="openTab(event, 'consumption-post-response')">Response</button>
-                    <button class="tablinks" onclick="openTab(event, 'consumption-post-curl')">Curl</button>
+                    <button class="tablinks active" onclick="openTab(event, 'consumption-post-response')">Response</button>
                 </div>
                 
-                <div id="consumption-post-request" class="tabcontent active">
+                <div id="consumption-post-response" class="tabcontent active">
                     <pre><code>{
-    "device_id": 1,
-    "voltage": 220.0,
-    "current": 0.5,
-    "time_on": 60.0,
-    "active_energy": 0.1833,
-    "reading_timestamp": "2025-05-05T11:00:00Z"
+    "error": "Consumption records can only be added through syncing with the external API. Use /api/consumption/sync/{device_id} instead."
 }</code></pre>
-                </div>
-                
-                <div id="consumption-post-response" class="tabcontent">
-                    <pre><code>{
-    "id": 9,
-    "Appliance_Info": 1,
-    "Voltage": "220.0",
-    "Current": "0.50",
-    "TimeOn": "60.00",
-    "ActiveEnergy": "0.1833",
-    "Reading_Time_Stamp": "2025-05-05T11:00:00Z"
-}</code></pre>
-                </div>
-                
-                <div id="consumption-post-curl" class="tabcontent">
-                    <pre><code>curl -X POST -H "Content-Type: application/json" -d '{"device_id": 1, "voltage": 220.0, "current": 0.5, "time_on": 60.0, "active_energy": 0.1833, "reading_timestamp": "2025-05-05T11:00:00Z"}' http://localhost:5000/api/consumption</code></pre>
                 </div>
             </div>
             

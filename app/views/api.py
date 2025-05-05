@@ -27,20 +27,7 @@ def get_device(device_id):
 
 @api_bp.route('/devices', methods=['POST'])
 def create_device():
-    data = request.json
-    if not data or 'name' not in data or 'rated_power' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-    
-    meter_number = data.get('meter_number', '')
-    relay_status = data.get('relay_status', 'OFF')
-    
-    device = DeviceController.create_device(
-        data['name'], 
-        meter_number, 
-        data['rated_power'], 
-        relay_status
-    )
-    return jsonify(device), 201
+    return jsonify({'error': 'Devices can only be added through syncing with the external API. Use /api/devices/sync instead.'}), 405
 
 @api_bp.route('/devices/<int:device_id>', methods=['PUT'])
 def update_device(device_id):
@@ -109,20 +96,7 @@ def get_total_consumption():
 
 @api_bp.route('/consumption', methods=['POST'])
 def add_consumption_record():
-    data = request.json
-    if not data or 'device_id' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-    
-    record = ConsumptionController.add_consumption_record(
-        device_id=data['device_id'],
-        voltage=data['voltage'],
-        current=data['current'],
-        time_on=data['time_on'],
-        active_energy=data['active_energy'],
-        reading_timestamp=datetime.fromisoformat(data['reading_timestamp'].replace('Z', '+00:00'))
-    )
-    
-    return jsonify(record), 201
+    return jsonify({'error': 'Consumption records can only be added through syncing with the external API. Use /api/consumption/sync/{device_id} instead.'}), 405
 
 @api_bp.route('/consumption/sync/<int:device_id>', methods=['POST'])
 def sync_consumption(device_id):
